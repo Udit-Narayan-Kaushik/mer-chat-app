@@ -1,26 +1,10 @@
-import mongoose from "mongoose";
+import express from "express";
+import { getMessages, sendMessage } from "../controllers/message.controller.js";
+import protectRoute from "../middleware/protectRoute.js";
 
-const messageSchema = new mongoose.Schema(
-	{
-		senderId: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "User",
-			required: true,
-		},
-		receiverId: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "User",
-			required: true,
-		},
-		message: {
-			type: String,
-			required: true,
-		},
-		// createdAt, updatedAt
-	},
-	{ timestamps: true }
-);
+const router = express.Router();
 
-const Message = mongoose.model("Message", messageSchema);
+router.get("/:id", protectRoute, getMessages);
+router.post("/send/:id", protectRoute, sendMessage);
 
-export default Message;
+export default router;
